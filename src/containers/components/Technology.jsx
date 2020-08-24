@@ -5,45 +5,50 @@ import { createMarkup } from '../../utils'
 import { useHistory } from 'react-router-dom'
 
 function Technology({ values }) {
-    const HISTORY = useHistory()
+  const history = useHistory()
 
-    const RENDER_IMG = ({ image, description }) =>
+  const renderImg = ({ image, description }) => (
     <div>
-        <img src={image.url} alt={description} width="100%" />
+      <img src={image.url} alt={description} width="100%" />
     </div>
+  )
 
-    const OPEN_POST = (id) => {
-        HISTORY.push(`/technology/${id}`)
-    }
+  const openPost = (id) => {
+    history.push(`/technology/${id}`)
+  }
 
-    const RENDER_POST = (post, index) => {
-        const { title, image, description, id } = post
-        return (
-            <Col span={12} md={6} key={`technology-${index}`}>
-                <article onClick={() => OPEN_POST(id)}>
-                    <p>
-                        <strong dangerouslySetInnerHTML={createMarkup(title)} />
-                    </p>
-                    <p dangerouslySetInnerHTML={createMarkup(description)} />
-                    {image.url && RENDER_IMG({ image, description })}
-                </article>
-            </Col>
-        )
-    }
-
+  const renderPost = (post, index) => {
+    const { title, image, description, id } = post
+    
     return (
-        <Row gutter={[16, 16]}>
-            {values?.map(RENDER_POST)}
-        </Row>
+      <Col span={12} md={6} key={`technology-${index}`}>
+        <article onClick={() => openPost(id)}>
+           <p>
+            <strong dangerouslySetInnerHTML={createMarkup(title)} />
+          </p>
+          <p dangerouslySetInnerHTML={createMarkup(description)} />
+          {image.url && renderImg({ image, description })}
+        </article>
+      </Col>
     )
+  }
+
+
+
+  return (
+    <Row gutter={[16, 16]}>
+      {values?.map(renderPost)}
+    </Row>
+  )
 }
 
 Technology.defaultProps = {
-    values: []
+  values: []
 }
 
 Technology.propTypes = {
-    values: PropTypes.array.isRequired
+  values: PropTypes.array.isRequired
 }
+
 
 export default memo(Technology)

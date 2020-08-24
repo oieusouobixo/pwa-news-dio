@@ -5,44 +5,45 @@ import { createMarkup } from '../../utils'
 import { useHistory } from 'react-router-dom'
 
 function Economy({ values }) {
-    const HISTORY = useHistory()
+  const history = useHistory()
 
-    const RENDER_IMG = ({ image, description }) =>
+  const renderImg = ({ image, description }) =>
     <img src={image.url} alt={description} width="100%" />
 
-    const RENDER_DESCRIPTION = (description) => <p dangerouslySetInnerHTML={createMarkup(description)} />
+  const renderDescription = (description) => <p dangerouslySetInnerHTML={createMarkup(description)} />
 
-    const OPEN_POST = (id) => {
-        HISTORY.push(`/economy/${id}`)
-    }
+  const openPost = (id) => {
+    history.push(`/economy/${id}`)
+  }
 
-    const RENDER_POST = (post, index) => {
-        const { title, image, description, id } = post
-        return (
-            <Col span={24} md={12} key={`post-${index}`}>
-                <article onClick={() => OPEN_POST(id)}>
-                    <p>
-                        <strong dangerouslySetInnerHTML={createMarkup(title)} />
-                    </p>
-                    {image?.url ? RENDER_IMG({ image, description }) : RENDER_DESCRIPTION(description)}
-                </article>
-            </Col>
-        )
-    }
-
+  const renderPost = (post, index) => {
+    const { title, image, description, id } = post
     return (
-        <Row gutter={[16, 16]}>
-            {values?.map(RENDER_POST)}
-        </Row>
+      <Col span={24} md={12} key={`post-${index}`}>
+        <article onClick={() => openPost(id)}>
+          <p>
+            <strong dangerouslySetInnerHTML={createMarkup(title)} />
+          </p>
+          {image?.url ? renderImg({ image, description }) : renderDescription(description)}
+        </article>
+      </Col>
     )
+  }
+
+  return (
+    <Row gutter={[16, 16]}>
+      {values?.map(renderPost)}
+    </Row>
+  )
 }
 
 Economy.defaultProps = {
-    values: []
+  values: []
 }
 
 Economy.propTypes = {
-    values: PropTypes.array.isRequired
+  values: PropTypes.array.isRequired
 }
+
 
 export default memo(Economy)
